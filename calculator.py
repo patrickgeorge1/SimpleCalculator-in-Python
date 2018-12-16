@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import Tk
+from tkinter import messagebox
 
 calculator = Tk()
 calculator.title("Calculator")
@@ -23,6 +23,19 @@ class Application(Frame):
         self.display.delete(0, END)
         self.display.insert(0, text)
 
+    def clearText(self):
+        self.replaceText("0")
+
+    def calculateExpression(self):
+        self.expression = self.display.get()
+        self.expression = self.expression.replace("%", "/100 *")
+
+        try:
+            self.res = eval(self.expression)
+            self.replaceText(self.res)
+        except:
+            messagebox.showinfo("Error", "Invalid input")
+
     def createWidgets(self):
         self.display = Entry(self, font=("Helvetica", 16), relief=RAISED, justify=RIGHT)
         self.display.insert(0, "0")
@@ -42,7 +55,7 @@ class Application(Frame):
         self.timesButton = Button(self, font=("Helvetica", 11), text="*", command=lambda: self.appendToDisplay("*"))
         self.timesButton.grid(row=1, column=4, sticky="NWNESWSE")
 
-        self.clearButton = Button(self, font=("Helvetica", 11), text="C")
+        self.clearButton = Button(self, font=("Helvetica", 11), text="C", command=lambda: self.clearText())
         self.clearButton.grid(row=1, column=5, sticky="NWNESWSE")
 
 
@@ -74,7 +87,7 @@ class Application(Frame):
         self.minusButton = Button(self, font=("Helvetica", 11), text="-", command=lambda: self.appendToDisplay("-"))
         self.minusButton.grid(row=3, column=4, sticky="NWNESWSE")
 
-        self.equalButton = Button(self, font=("Helvetica", 11), text="=")
+        self.equalButton = Button(self, font=("Helvetica", 11), text="=", command=lambda: self.calculateExpression())
         self.equalButton.grid(row=3, column=5, sticky="NWNESWSE", rowspan=2)
 
 
